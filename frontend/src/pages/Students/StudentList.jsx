@@ -3,11 +3,14 @@ import { Link } from 'react-router-dom';
 import api from '../../apis/axios';
 import { Edit2, Trash2, Plus } from 'lucide-react';
 import { toast } from 'react-toastify';
+import ConfirmModal from '../../components/ConfirmModal';
+
 const StudentList = () => {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [className, setClassName] = useState('');
+  const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: null });
 
   const fetchStudents = async () => {
     try {
@@ -34,17 +37,21 @@ const StudentList = () => {
 
     return () => clearTimeout(delayDebounceFn);
   }, [searchTerm, className]);
-  const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this student?')) {
-      try {
-        const response = await api.delete(`/students/${id}`);
-        if (response.data.success) {
-          toast.success('Student deleted successfully');
-          fetchStudents();
-        }
-      } catch (error) {
-        toast.error(error.response?.data?.message || 'Failed to delete student');
+  const confirmDelete = (id) => {
+    setDeleteModal({ isOpen: true, id });
+  };
+
+  const handleDelete = async () => {
+    const id = deleteModal.id;
+    if (!id) return;
+    try {
+      const response = await api.delete(`/students/${id}`);
+      if (response.data.success) {
+        toast.success('Student deleted successfully');
+        fetchStudents();
       }
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to delete student');
     }
   };
   if (loading) return <div className="flex justify-center py-10">Loading...</div>;
@@ -115,7 +122,7 @@ const StudentList = () => {
                           <Edit2 size={18} />
                         </Link>
                         <button
-                          onClick={() => handleDelete(student._id)}
+                          onClick={() => confirmDelete(student._id)}
                           className="text-red-600 hover:text-red-800 transition-colors p-1"
                         >
                           <Trash2 size={18} />
@@ -129,6 +136,14 @@ const StudentList = () => {
           </table>
         </div>
       </div>
+
+      <ConfirmModal
+        isOpen={deleteModal.isOpen}
+        onClose={() => setDeleteModal({ isOpen: false, id: null })}
+        onConfirm={handleDelete}
+        title="Delete Student"
+        message="Are you sure you want to delete this student? This action cannot be undone."
+      />
     </div>
   );
 };

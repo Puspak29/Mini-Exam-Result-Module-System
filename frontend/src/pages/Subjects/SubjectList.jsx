@@ -3,10 +3,13 @@ import { Link } from 'react-router-dom';
 import api from '../../apis/axios';
 import { Edit2, Trash2, Plus } from 'lucide-react';
 import { toast } from 'react-toastify';
+import ConfirmModal from '../../components/ConfirmModal';
+
 const SubjectList = () => {
   const [subjects, setSubjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: null });
 
   const fetchSubjects = async () => {
     try {
@@ -31,17 +34,21 @@ const SubjectList = () => {
 
     return () => clearTimeout(delayDebounceFn);
   }, [searchTerm]);
-  const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this subject?')) {
-      try {
-        const response = await api.delete(`/subjects/${id}`);
-        if (response.data.success) {
-          toast.success('Subject deleted successfully');
-          fetchSubjects();
-        }
-      } catch (error) {
-        toast.error(error.response?.data?.message || 'Failed to delete subject');
+  const confirmDelete = (id) => {
+    setDeleteModal({ isOpen: true, id });
+  };
+
+  const handleDelete = async () => {
+    const id = deleteModal.id;
+    if (!id) return;
+    try {
+      const response = await api.delete(`/subjects/${id}`);
+      if (response.data.success) {
+        toast.success('Subject deleted successfully');
+        fetchSubjects();
       }
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to delete subject');
     }
   };
   if (loading) return <div className="flex justify-center py-10">Loading...</div>;
@@ -101,7 +108,7 @@ const SubjectList = () => {
                           <Edit2 size={18} />
                         </Link>
                         <button
-                          onClick={() => handleDelete(subject._id)}
+                          onClick={() => confirmDelete(subject._id)}
                           className="text-red-600 hover:text-red-800 transition-colors p-1"
                         >
                           <Trash2 size={18} />
@@ -115,6 +122,14 @@ const SubjectList = () => {
           </table>
         </div>
       </div>
+
+      <ConfirmModal
+        isOpen={deleteModal.isOpen}
+        onClose={() => setDeleteModal({ isOpen: false, id: null })}
+        onConfirm={handleDelete}
+        title="Delete Subject"
+        message="Are you sure you want to delete this subject? This action cannot be undone."
+      />
     </div>
   );
 };

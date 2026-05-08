@@ -3,10 +3,13 @@ import { Link } from 'react-router-dom';
 import api from '../../apis/axios';
 import { Trash2, Plus, Eye } from 'lucide-react';
 import { toast } from 'react-toastify';
+import ConfirmModal from '../../components/ConfirmModal';
+
 const ResultList = () => {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(true);
   const [examName, setExamName] = useState('');
+  const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: null });
 
   const fetchResults = async () => {
     try {
@@ -31,17 +34,21 @@ const ResultList = () => {
 
     return () => clearTimeout(delayDebounceFn);
   }, [examName]);
-  const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this result?')) {
-      try {
-        const response = await api.delete(`/results/${id}`);
-        if (response.data.success) {
-          toast.success('Result deleted successfully');
-          fetchResults();
-        }
-      } catch (error) {
-        toast.error(error.response?.data?.message || 'Failed to delete result');
+  const confirmDelete = (id) => {
+    setDeleteModal({ isOpen: true, id });
+  };
+
+  const handleDelete = async () => {
+    const id = deleteModal.id;
+    if (!id) return;
+    try {
+      const response = await api.delete(`/results/${id}`);
+      if (response.data.success) {
+        toast.success('Result deleted successfully');
+        fetchResults();
       }
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to delete result');
     }
   };
   if (loading) return <div className="flex justify-center py-10">Loading...</div>;
@@ -108,7 +115,7 @@ const ResultList = () => {
                           <Eye size={18} />
                         </Link>
                         <button
-                          onClick={() => handleDelete(result._id)}
+                          onClick={() => confirmDelete(result._id)}
                           className="text-red-600 hover:text-red-800 transition-colors p-1"
                         >
                           <Trash2 size={18} />
@@ -122,6 +129,14 @@ const ResultList = () => {
           </table>
         </div>
       </div>
+
+      <ConfirmModal
+        isOpen={deleteModal.isOpen}
+        onClose={() => setDeleteModal({ isOpen: false, id: null })}
+        onConfirm={handleDelete}
+        title="Delete Result"
+        message="Are you sure you want to delete this result? This action cannot be undone."
+      />
     </div>
   );
 };
