@@ -4,6 +4,26 @@ A full-stack **MERN** application for managing student exam results. Supports co
 
 ---
 
+## 📑 Table of Contents
+
+- [Project Structure](#️-project-structure)
+  - [Backend Structure](#-backend-structure)
+  - [Frontend Structure](#-frontend-structure)
+- [Prerequisites](#-prerequisites)
+- [Backend Setup](#️-backend-setup)
+- [Frontend Setup](#-frontend-setup)
+- [Quick Start](#-quick-start-run-both-servers)
+- [API Reference](#-api-reference)
+  - [Endpoints](#endpoints)
+  - [Search & Filter Query Parameters](#-search--filter-query-parameters)
+- [Frontend Routes](#-frontend-routes)
+- [Tech Stack](#️-tech-stack)
+- [Authentication](#-authentication)
+- [Print Report Card](#️-print-report-card)
+
+---
+
+
 ## 🗂️ Project Structure
 
 ```
