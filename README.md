@@ -19,6 +19,7 @@ A full-stack **MERN** application for managing student exam results. Supports co
 - [Frontend Routes](#-frontend-routes)
 - [Tech Stack](#️-tech-stack)
 - [Authentication](#-authentication)
+- [API Documentation (Swagger)](#-api-documentation-swagger)
 - [Print Report Card](#️-print-report-card)
 
 ---
@@ -324,6 +325,46 @@ Then visit **http://localhost:5173** and log in with the seeded admin credential
 | Yup               | Schema-based form validation     |
 | Lucide React      | Icon library                     |
 | React Toastify    | Toast notifications              |
+
+---
+
+## 📖 API Documentation (Swagger)
+
+This project ships with a full **Swagger / OpenAPI 3.0** interactive documentation UI powered by `swagger-ui-express` and `swagger-jsdoc`.
+
+### Accessing the Docs
+
+Start the backend server, then open in your browser:
+
+```
+http://localhost:8000/api-docs
+```
+
+### Features
+
+| Feature | Details |
+|---|---|
+| **UI** | Interactive Swagger UI — test every endpoint directly from the browser |
+| **Auth** | Click **Authorize** → paste your JWT from `POST /auth/login` → all protected endpoints unlock |
+| **Persist Auth** | `persistAuthorization: true` — token stays saved across page refreshes |
+| **Schemas** | Full request/response schemas for Student, Subject, Result, Auth, Pagination, and Error |
+| **Tags** | Endpoints grouped by module: Auth · Students · Subjects · Results · Dashboard |
+
+### How to Authenticate in Swagger
+
+1. Call `POST /auth/login` with your credentials (no auth required)
+2. Copy the `token` value from the response
+3. Click the **🔓 Authorize** button (top-right of the Swagger UI)
+4. Paste the token in the **Value** field (format: just the token, no `Bearer` prefix needed)
+5. Click **Authorize** — all protected routes are now unlocked for testing
+
+### Files
+
+| File | Purpose |
+|---|---|
+| `backend/src/config/swagger.js` | OpenAPI 3.0 definition — info, servers, security schemes, and all component schemas |
+| `backend/src/app.js` | Mounts `swagger-ui-express` at `/api-docs` |
+| `*/routes.js` | Each route file contains `@swagger` JSDoc annotations for all endpoints |
 
 ---
 
