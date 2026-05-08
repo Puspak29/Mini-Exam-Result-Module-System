@@ -12,7 +12,7 @@ import Dashboard from './pages/Dashboard';
 import StudentList from './pages/Students/StudentList';
 import StudentForm from './pages/Students/StudentForm';
 import SubjectList from './pages/Subjects/SubjectList';
-import SubjectForm from './pages/Students/SubjectForm';
+import SubjectForm from './pages/Subjects/SubjectForm';
 import ResultList from './pages/Results/ResultList';
 import ResultForm from './pages/Results/ResultForm';
 import ResultDetail from './pages/Results/ResultDetail';
