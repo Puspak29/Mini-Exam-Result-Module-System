@@ -12,6 +12,9 @@ const subjectRoutes = require('./modules/subject/subject.routes');
 const resultRoutes = require('./modules/result/result.routes');
 const dashboardRoutes = require('./modules/dashboard/dashboard.routes');
 const { errorHandler } = require('./middlewares/errors');
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./config/swagger');
+
 
 const app = express();
 
@@ -25,6 +28,13 @@ app.get('/api/health', (_, res) => sendSuccess(res, HTTP_STATUS.OK, 'API is heal
     uptime: process.uptime().toFixed(2) + ' seconds',
     timestamp: new Date().toISOString()
 }));
+
+// Swagger UI — available at /api-docs
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+    customSiteTitle: 'Exam Result API Docs',
+    swaggerOptions: { persistAuthorization: true },
+}));
+
 
 app.use('/api/auth', authRoutes);
 app.use('/api/students', studentRoutes);
