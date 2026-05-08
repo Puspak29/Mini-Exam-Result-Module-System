@@ -21,17 +21,17 @@ const subjectSchema = new mongoose.Schema({
     passMarks: { 
         type: Number, 
         required: [true, 'Pass marks is required'], 
-        min: [1, 'Pass marks must be positive'] 
+        min: [1, 'Pass marks must be positive'],
+        validate: {
+            validator: function(v) {
+                // 'this' refers to the document being validated
+                return this.fullMarks ? v < this.fullMarks : true;
+            },
+            message: 'Pass marks must be less than full marks'
+        }
     }
 },{ 
     timestamps: true 
-});
-
-subjectSchema.pre('validate', function (next) {
-    if (this.passMarks >= this.fullMarks) {
-        this.invalidate('passMarks', 'Pass marks must be less than full marks');
-    }
-    next();
 });
 
 module.exports = mongoose.model('Subject', subjectSchema);

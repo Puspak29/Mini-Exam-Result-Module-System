@@ -1,21 +1,21 @@
-const Subject = require('../../models/student');
+const Subject = require('../../models/subject');
 const { getPaginationParams, buildPaginationMeta } = require('../../utils/pagination');
 
 class SubjectService {
-    async create(data) { return Subject.create(data); }
+    async create(data) { return await Subject.create(data); }
 
     async findAll(query) {
         const { page, limit, skip } = getPaginationParams(query);
         const filter = {};
         if (query.search) {
-        filter.$or = [
-            { subjectName: { $regex: query.search, $options: 'i' } },
-            { subjectCode: { $regex: query.search, $options: 'i' } },
-        ];
+            filter.$or = [
+                { subjectName: { $regex: query.search, $options: 'i' } },
+                { subjectCode: { $regex: query.search, $options: 'i' } },
+            ];
         }
         const [subjects, total] = await Promise.all([
-        Subject.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit),
-        Subject.countDocuments(filter),
+            Subject.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit),
+            Subject.countDocuments(filter),
         ]);
         return { subjects, pagination: buildPaginationMeta(total, page, limit) };
     }
@@ -38,7 +38,7 @@ class SubjectService {
         return subject;
     }
 
-    async findAllRaw() { return Subject.find({}).sort({ subjectName: 1 }); }
+    async findAllRaw() { return await Subject.find({}).sort({ subjectName: 1 }); }
 }
 
 module.exports = new SubjectService();
