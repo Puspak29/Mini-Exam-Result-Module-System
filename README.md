@@ -6,6 +6,7 @@ A full-stack **MERN** application for managing student exam results. Supports co
 
 ## 📑 Table of Contents
 
+- [Screenshots](#-screenshots)
 - [Project Structure](#️-project-structure)
   - [Backend Structure](#-backend-structure)
   - [Frontend Structure](#-frontend-structure)
@@ -24,6 +25,17 @@ A full-stack **MERN** application for managing student exam results. Supports co
 
 ---
 
+## 📸 Screenshots
+
+| Dashboard Overview | Student Management |
+| :---: | :---: |
+| <img src="./screenshots/dashboard.png" alt="Dashboard" width="450" /> | <img src="./screenshots/students.png" alt="Students" width="450" /> |
+| **Subjects List** | **Results List** |
+| <img src="./screenshots/subjects.png" alt="Subjects" width="450" /> | <img src="./screenshots/results.png" alt="Results" width="450" /> |
+| **Printable Report Card Detail** | **Swagger API Documentation** |
+| <img src="./screenshots/report-card.png" alt="Report Card" width="450" /> | <img src="./screenshots/swagger.png" alt="Swagger API Docs" width="450" /> |
+
+---
 
 ## 🗂️ Project Structure
 
